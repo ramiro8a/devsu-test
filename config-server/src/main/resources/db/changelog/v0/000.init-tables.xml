@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="001-crea-tabla-t_cliente" author="rochoa">
+        <comment>
+            Create table t_cliente
+        </comment>
+        <createTable tableName="t_cliente">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="application" type="VARCHAR(100)" remarks="Nombre del microservicio "/>
+            <column name="profile" type="VARCHAR(100)" remarks="Perfil"/>
+            <column name="label" type="VARCHAR(100)"/>
+            <column name="prop_key" type="VARCHAR(150)" remarks="Nombre de la variable"/>
+            <column name="prop_value" type="VARCHAR(150)" remarks="Valor de la variable"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="t_cliente"/>
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

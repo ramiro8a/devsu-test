@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="001-crea-tabla-t_cuenta" author="rochoa">
+        <comment>
+            Create table t_cuenta
+        </comment>
+        <createTable tableName="t_cuenta">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nro_cuenta" type="VARCHAR(100)"/>
+            <column name="tipo_cuenta" type="INTEGER" remarks="0:Ahorros,1:Corriente"/>
+            <column name="saldo_inicial" type="NUMERIC(19, 4)"/>
+            <column name="saldo_disponible" type="NUMERIC(19, 4)"/>
+            <column name="estado" type="INTEGER" defaultValue="0" remarks="0:Activo,1:Inactivo"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="t_cuenta"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="002-crea-tabla-t_movimiento" author="rochoa">
+        <comment>
+            Create table t_movimiento
+        </comment>
+        <createTable tableName="t_movimiento">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cuenta_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fecha_mov" type="TIMESTAMP"/>
+            <column name="tipo_mov" type="INTEGER" remarks="0:Deposito,1:Retiro"/>
+            <column name="valor" type="NUMERIC(19, 4)"/>
+            <column name="saldo" type="NUMERIC(19, 4)"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="t_movimiento"
+                baseColumnNames="cuenta_id"
+                referencedTableName="t_cuenta"
+                referencedColumnNames="id"
+                constraintName="fk_movimiento_cuenta"/>
+        <rollback>
+            <dropTable tableName="t_movimiento"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="003-crea-tabla-t_client_referencia" author="rochoa">
+        <comment>
+            Create table t_client_referencia
+        </comment>
+        <createTable tableName="t_client_referencia">
+            <column name="client_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="identificacion" type="VARCHAR(15)"/>
+            <column name="nombres" type="VARCHAR(250)"/>
+            <column name="estado" type="INTEGER" defaultValue="0" remarks="0:Activo,1:Inactivo"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="t_client_referencia"/>
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>
