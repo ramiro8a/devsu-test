@@ -1,0 +1,97 @@
+services:
+
+  # ──────────────────────────────────────────────
+  # PostgreSQL — crea devsu_client y devsu_account
+  # ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: devsu-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: h4ckm3
+      POSTGRES_DB: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ──────────────────────────────────────────────
+  # Apache Kafka (KRaft)
+  # ──────────────────────────────────────────────
+  kafka:
+    image: apache/kafka:latest
+    container_name: devsu-kafka
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9093:9092"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # ──────────────────────────────────────────────
+  # Client Manager — :8021
+  # ──────────────────────────────────────────────
+  client-manager:
+    build:
+      context: ./client-manager
+      dockerfile: Dockerfile
+    container_name: devsu-client-manager
+    environment:
+      PORT: 8021
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: devsu_client
+      DB_USERNAME: postgres
+      DB_PASSWORD: h4ckm3
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - "8021:8021"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+  # ──────────────────────────────────────────────
+  # Account Manager — :8022
+  # ──────────────────────────────────────────────
+  account-manager:
+    build:
+      context: ./account-manager
+      dockerfile: Dockerfile
+    container_name: devsu-account-manager
+    environment:
+      PORT: 8022
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: devsu_account
+      DB_USERNAME: postgres
+      DB_PASSWORD: h4ckm3
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_CLOUD_CONFIG_ENABLED: "false"
+      SPRING_CONFIG_IMPORT: ""
+    ports:
+      - "8022:8022"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+volumes:
+  pgdata:

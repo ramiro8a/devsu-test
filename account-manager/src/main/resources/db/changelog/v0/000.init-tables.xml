@@ -59,7 +59,7 @@
             Create table t_client_referencia
         </comment>
         <createTable tableName="t_client_referencia">
-            <column name="client_id" type="BIGINT" autoIncrement="true">
+            <column name="client_id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="identificacion" type="VARCHAR(15)"/>

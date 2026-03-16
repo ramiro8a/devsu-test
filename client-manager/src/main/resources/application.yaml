@@ -18,4 +18,4 @@ spring:
     drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
