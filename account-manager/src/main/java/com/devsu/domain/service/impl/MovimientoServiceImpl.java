@@ -59,6 +59,12 @@ public class MovimientoServiceImpl implements MovimientoService {
             cuenta.getHistorico().add(movimiento);
         }
         cuenta = cuentaService.saveHelper(cuenta);
-        return cuenta.getHistorico().getLast().toResponse();
+        return cuenta.getHistorico().getFirst().toResponse();
+    }
+
+    @Override
+    public List<MovimientoResponse> buscarPorNroCuenta(String nroCuenta) {
+        Cuenta cuenta = cuentaService.recuperaPorNroCuenta(nroCuenta);
+        return cuenta.getHistorico().stream().map(Movimiento::toResponse).toList();
     }
 }

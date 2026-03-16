@@ -38,7 +38,7 @@ public class Cuenta {
     private BigDecimal saldoDisponible;
     private Integer estado;
     @OneToMany(mappedBy = "cuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OrderBy("id ASC")
+    @OrderBy("id DESC")
     private List<Movimiento> historico = new ArrayList<>();
 
     public CuentaResponse toResponse() {

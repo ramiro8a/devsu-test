@@ -19,6 +19,7 @@ public enum ErrorCode {
     SALDO_INSUFICIENTE(HttpStatus.BAD_REQUEST, "Saldo insuficiente", "ER010"),
     TIPO_MOVIMIENTO_INVALIDO(HttpStatus.BAD_REQUEST, "Tipo de movimiento inválido", "ER011"),
     VALOR_MOVIMIENTO_INVALIDO(HttpStatus.BAD_REQUEST, "Valor del movimiento inválido", "ER012"),
+    FECHA_DESDE_NO_PUEDE_SER_MAYOR_QUE_FECHA_HASTA(HttpStatus.BAD_REQUEST, "La fecha desde no puede ser mayor que la fecha hasta", "ER013"),
     ;
     private final HttpStatus status;
     private final String message;

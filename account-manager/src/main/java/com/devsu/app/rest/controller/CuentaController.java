@@ -2,8 +2,11 @@ package com.devsu.app.rest.controller;
 
 import com.devsu.app.rest.request.CuentaRequest;
 import com.devsu.app.rest.request.CuentaUpdateRequest;
+import com.devsu.app.rest.request.EstadoCuentaFilter;
 import com.devsu.app.rest.response.CuentaResponse;
+import com.devsu.app.rest.response.ReporteEstadoCuentaResponse;
 import com.devsu.domain.service.CuentaService;
+import com.devsu.domain.service.ReporteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ import java.util.List;
 @RequestMapping(path = "/cuentas")
 public class CuentaController {
     private final CuentaService cuentaService;
+    private final ReporteService reporteService;
 
     @PostMapping("")
     public ResponseEntity<CuentaResponse> crea(
@@ -55,5 +59,12 @@ public class CuentaController {
             @Valid @RequestBody CuentaUpdateRequest request
             ) {
         return new ResponseEntity<>(cuentaService.actualizar(id, request), HttpStatus.OK);
+    }
+
+    @GetMapping("/reportes")
+    public ResponseEntity<ReporteEstadoCuentaResponse> reportes(
+            @Valid EstadoCuentaFilter filter
+    ) {
+        return ResponseEntity.ok(reporteService.obtenerReporte(filter));
     }
 }
