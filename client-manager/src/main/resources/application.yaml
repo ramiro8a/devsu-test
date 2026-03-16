@@ -14,13 +14,6 @@ spring:
     hibernate:
       ddl-auto: none
       show-sql: true
-  profiles:
-    active: dev
-  cloud:
-    config:
-      label: master
-  config:
-    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8020}
   liquibase:
     drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
