@@ -202,6 +202,8 @@ docker compose down
 docker compose down -v
 ```
 
+> **Solución de problemas con la base de datos:** Si por alguna razón la base de datos se corrompe o Liquibase presenta errores de migración, ejecutar `docker compose down -v` para eliminar los volúmenes y luego `docker compose up --build` para reiniciar desde cero. Liquibase recreará todas las tablas automáticamente.
+
 ### Reconstruir un servicio específico
 
 ```bash
