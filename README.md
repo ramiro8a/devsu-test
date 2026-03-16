@@ -31,7 +31,6 @@ Los microservicios se comunican de forma asíncrona a través de Kafka. Cuando u
 |-------------------------|------------|
 | Java                    | 21         |
 | Spring Boot             | 4.0.3      |
-| Spring Cloud            | 2025.1.0   |
 | Apache Kafka            | (vía Spring Kafka) |
 | PostgreSQL              | 15+        |
 | Liquibase               | (vía Spring Boot)  |
@@ -214,14 +213,16 @@ Al ejecutar `docker compose up --build`, se levantan automáticamente:
 
 | Servicio           | Puerto | Descripción                              |
 |--------------------|--------|------------------------------------------|
-| **postgres**       | 5432   | PostgreSQL 16 — crea `devsu_client` y `devsu_account` al inicio |
-| **kafka**          | 9092   | Apache Kafka (modo KRaft, sin Zookeeper) |
+| **postgres**       | 5435   | PostgreSQL 16 — crea `devsu_client` y `devsu_account` al inicio |
+| **kafka**          | 9093   | Apache Kafka (modo KRaft, sin Zookeeper) |
 | **client-manager** | 8021   | Microservicio de gestión de clientes     |
 | **account-manager**| 8022   | Microservicio de cuentas y movimientos   |
 
 ---
 
 ## Ejecución Local (sin Docker)
+
+> **Nota:** En ejecución local se usan los puertos estándar (PostgreSQL `5432`, Kafka `9092`). En Docker Compose los puertos expuestos al host son `5435` (PostgreSQL) y `9093` (Kafka) para evitar conflictos con servicios locales.
 
 ### 1. Crear las bases de datos en PostgreSQL
 
@@ -412,4 +413,4 @@ prueba-practica/
 
 ## Autor
 
-Ramiro Ochoa
+Ramiro Ochoa Apaza
