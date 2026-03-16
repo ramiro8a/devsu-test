@@ -14,12 +14,17 @@ services:
       - "5435:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./docker/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 10
+    entrypoint:
+      - sh
+      - -c
+      - |
+        echo "CREATE DATABASE devsu_client; CREATE DATABASE devsu_account;" > /docker-entrypoint-initdb.d/init.sql
+        exec docker-entrypoint.sh postgres
 
   # ──────────────────────────────────────────────
   # Apache Kafka (KRaft)
